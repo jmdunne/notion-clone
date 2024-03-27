@@ -6,6 +6,7 @@ import { ElementRef, useEffect, useRef, useState } from "react"; // Import React
 import { useMediaQuery } from "usehooks-ts"; // Import hook to listen for media query changes
 
 import { cn } from "@/lib/utils"; // Import a utility function for class name concatenation
+import { UserItem } from "./user-item";
 
 export const Navigation = () => {
   // Define and export the Navigation component
@@ -127,7 +128,7 @@ export const Navigation = () => {
           <ChevronsLeft className="h-6 w-6" /> {/* Collapse icon */}
         </div>
         <div>
-          <p>Action items</p> {/* Placeholder for action items */}
+          <UserItem />
         </div>
         <div className="mt-4">
           <p>Documents</p> {/* Placeholder for documents */}
