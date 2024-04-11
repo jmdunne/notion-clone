@@ -4,14 +4,18 @@ import { ChevronsLeft, MenuIcon } from "lucide-react"; // Import icons from luci
 import { usePathname } from "next/navigation"; // Import hook to get the current pathname
 import { ElementRef, useEffect, useRef, useState } from "react"; // Import React hooks and types
 import { useMediaQuery } from "usehooks-ts"; // Import hook to listen for media query changes
+import { useQuery } from "convex/react";
 
 import { cn } from "@/lib/utils"; // Import a utility function for class name concatenation
+import { api } from "@/convex/_generated/api";
+
 import { UserItem } from "./user-item";
 
 export const Navigation = () => {
   // Define and export the Navigation component
   const pathname = usePathname(); // Get the current pathname
   const isMobile = useMediaQuery("(max-width: 768px)"); // Check if the viewport width is less than 768px
+  const documents = useQuery(api.documents.get);
 
   const isResizingRef = useRef(false); // Create a ref to track if the user is resizing the sidebar
   const sidebarRef = useRef<ElementRef<"aside">>(null); // Create a ref for the sidebar element
@@ -131,7 +135,9 @@ export const Navigation = () => {
           <UserItem />
         </div>
         <div className="mt-4">
-          <p>Documents</p> {/* Placeholder for documents */}
+          {documents?.map((document) => (
+            <p key={document._id}>{document.title}</p>
+          ))}
         </div>
         <div // Resize bar
           onMouseDown={handleMouseDown} // Start resizing on mouse down

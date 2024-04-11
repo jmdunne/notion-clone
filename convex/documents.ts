@@ -6,6 +6,17 @@ import { mutation, query } from "./_generated/server";
 // Importing types for document and ID from a generated data model file to ensure type safety in our operations.
 import { Doc, Id } from "./_generated/dataModel";
 
+export const get = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+    const documents = await ctx.db.query("documents").collect();
+    return documents;
+  },
+});
+
 // Defining a mutation called 'create' to insert a new document into the database.
 export const create = mutation({
   // Specifying the arguments this mutation accepts: a title and an optional parent document ID.
