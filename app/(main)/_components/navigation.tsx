@@ -18,7 +18,13 @@ export const Navigation = () => {
   // Define and export the Navigation component
   const pathname = usePathname(); // Get the current pathname
   const isMobile = useMediaQuery("(max-width: 768px)"); // Check if the viewport width is less than 768px
+  // Fetches the documents data using a query hook. This hook subscribes to the data source defined in `api.documents.get`.
+  // It will re-fetch the data whenever the underlying data changes, keeping the component in sync with the database.
   const documents = useQuery(api.documents.get);
+
+  // Creates a mutation function that can be called to create new documents.
+  // This function is generated based on the mutation definition in `api.documents.create`.
+  // When invoked, it will send a request to create a new document in the database.
   const create = useMutation(api.documents.create);
 
   const isResizingRef = useRef(false); // Create a ref to track if the user is resizing the sidebar
@@ -112,13 +118,17 @@ export const Navigation = () => {
     }
   };
 
+  // This function `handleCreate` is responsible for creating a new note with a default title "Untitled".
+  // It also handles the UI feedback by showing toast notifications based on the status of the note creation process.
   const handleCreate = () => {
+    // Create a new note with the title "Untitled" and store the returned promise
     const promise = create({ title: "Untitled" });
 
+    // Display a toast notification based on the promise status
     toast.promise(promise, {
-      loading: "Creating a new note...",
-      success: "Note created successfully",
-      error: "Failed to create note",
+      loading: "Creating a new note...", // Message shown while the promise is pending
+      success: "Note created successfully", // Message shown if the promise is fulfilled
+      error: "Failed to create note", // Message shown if the promise is rejected
     });
   };
 
@@ -147,9 +157,9 @@ export const Navigation = () => {
         </div>
         <div>
           <UserItem />
-          <Item label="Search" icon={Search} isSearch onClick={() => {}}/>
-          <Item label="Settings" icon={Settings} onClick={() => {}}/>
-          <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
+          <Item label="Search" icon={Search} isSearch onClick={() => {}}/> {/* Renders an Item component for search functionality with a Search icon */}
+          <Item label="Settings" icon={Settings} onClick={() => {}}/> {/* Renders an Item component for accessing settings with a Settings icon */}
+          <Item onClick={handleCreate} label="New page" icon={PlusCircle} /> {/* Renders an Item component for creating a new page with a PlusCircle icon */}
         </div>
         <div className="mt-4">
           {documents?.map((document) => (
