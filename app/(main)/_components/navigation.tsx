@@ -4,7 +4,7 @@ import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings } from "lucide-rea
 import { usePathname } from "next/navigation"; // Import hook to get the current pathname
 import { ElementRef, useEffect, useRef, useState } from "react"; // Import React hooks and types
 import { useMediaQuery } from "usehooks-ts"; // Import hook to listen for media query changes
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 
 import { cn } from "@/lib/utils"; // Import a utility function for class name concatenation
 import { api } from "@/convex/_generated/api";
@@ -13,14 +13,12 @@ import { UserItem } from "./user-item";
 import { Item } from "./item";
 import { toast } from "sonner";
 import { GearIcon } from "@radix-ui/react-icons";
+import { DocumentList } from "./document-list";
 
 export const Navigation = () => {
   // Define and export the Navigation component
   const pathname = usePathname(); // Get the current pathname
   const isMobile = useMediaQuery("(max-width: 768px)"); // Check if the viewport width is less than 768px
-  // Fetches the documents data using a query hook. This hook subscribes to the data source defined in `api.documents.get`.
-  // It will re-fetch the data whenever the underlying data changes, keeping the component in sync with the database.
-  const documents = useQuery(api.documents.get);
 
   // Creates a mutation function that can be called to create new documents.
   // This function is generated based on the mutation definition in `api.documents.create`.
@@ -162,9 +160,7 @@ export const Navigation = () => {
           <Item onClick={handleCreate} label="New page" icon={PlusCircle} /> {/* Renders an Item component for creating a new page with a PlusCircle icon */}
         </div>
         <div className="mt-4">
-          {documents?.map((document) => (
-            <p key={document._id}>{document.title}</p>
-          ))}
+          <DocumentList />
         </div>
         <div // Resize bar
           onMouseDown={handleMouseDown} // Start resizing on mouse down
